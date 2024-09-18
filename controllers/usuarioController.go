@@ -1,50 +1,66 @@
 package controllers
 
 import (
-	"database/sql"
 	"net/http"
 
+	"github.com/KarinaKuhne/API-usuario/database"
 	"github.com/KarinaKuhne/API-usuario/models"
 	"github.com/gin-gonic/gin"
 )
 
-// Função para criar um usuário
-func CreateUser(c *gin.Context, db *sql.DB) {
+func GetAllUsuarios(c *gin.Context) {
+	var usuarios []models.Usuario
+	database.DB.Find(&usuarios)
+	c.JSON(200, usuarios)
+}
+
+func CreateUsuario(c *gin.Context) {
 	var usuario models.Usuario
 	if err := c.ShouldBindJSON(&usuario); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{
+			"erro": err.Error()})
 		return
 	}
-
-	query := `INSERT INTO usuario (nome, data_nascimento, email, senha, cidade_residencia_id, tipo)
-	          VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`
-	err := db.QueryRow(query, usuario.Nome, usuario.DataNascimento, usuario.Email, usuario.Senha, usuario.CidadeResidenciaID, usuario.Tipo).Scan(&usuario.ID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao criar usuário"})
-		return
-	}
-
+	database.DB.Create(&usuario)
 	c.JSON(http.StatusOK, usuario)
 }
 
-// Função para buscar todos os usuários
-func GetAllUsers(c *gin.Context, db *sql.DB) {
-	rows, err := db.Query("SELECT id, nome, data_nascimento, email, cidade_residencia_id, tipo FROM usuario")
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao obter usuários"})
+func GetUsuariobyID(c *gin.Context) {
+	var usuario models.Usuario
+	id := c.Params.ByName("id")
+	database.DB.First(&usuario, id)
+	if usuario.ID == 0 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"Not Found": "Viajante não encontrado"})
 		return
 	}
-	defer rows.Close()
-
-	var usuarios []models.Usuario
-	for rows.Next() {
-		var usuario models.Usuario
-		if err := rows.Scan(&usuario.ID, &usuario.Nome, &usuario.DataNascimento, &usuario.Email, &usuario.CidadeResidenciaID, &usuario.Tipo); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao processar usuários"})
-			return
-		}
-		usuarios = append(usuarios, usuario)
-	}
-
-	c.JSON(http.StatusOK, usuarios)
+	c.JSON(http.StatusOK, usuario)
 }
+
+func DeletarUsuario(c *gin.Context) {
+	var usuario models.Usuario
+	id := c.Params.ByName("id")
+	database.DB.Delete(&usuario, id)
+	c.JSON(http.StatusOK, gin.H{"data": "Viajante deletado com sucesso"})
+}
+
+func EditarUsuario(c *gin.Context) {
+	var usuario models.Usuario
+	id := c.Params.ByName("id")
+	database.DB.First(&usuario, id)
+	if err := c.ShouldBindJSON(&usuario); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"erro": err.Error()})
+		return
+	}
+	database.DB.Save(&usuario)
+	c.JSON(http.StatusOK, usuario)
+}
+
+func RotaNaoEncontrada(c *gin.Context) {
+	c.HTML(http.StatusNotFound, "notFound.html", nil)
+}
+
+//Criar func de rota 404 ok criar asset com o html
+
+//Adicionar validações jwt
