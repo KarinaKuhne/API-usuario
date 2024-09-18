@@ -11,7 +11,7 @@ func HandleRequest() {
 	r.GET("/usuarios/:id", controllers.GetUsuariobyID)
 	r.POST("/usuarios", controllers.CreateUsuario)
 	r.DELETE("/usuarios/:id", controllers.DeletarUsuario)
-	r.PATCH("/alunos/:id", controllers.EditarUsuario)
+	r.PATCH("/usuarios/:id", controllers.EditarUsuario)
 	r.NoRoute(controllers.RotaNaoEncontrada)
 	r.Run()
 }
