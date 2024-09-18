@@ -2,9 +2,8 @@ package routes
 
 import (
 	"database/sql"
+
 	"github.com/KarinaKuhne/API-usuario/controllers"
-	"github.com/KarinaKuhne/API-usuario/models"
-	"github.com/KarinaKuhne/API-usuario/routes"
 	"github.com/gin-gonic/gin"
 )
 
