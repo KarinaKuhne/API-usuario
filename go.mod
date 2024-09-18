@@ -1,6 +1,6 @@
 module github.com/KarinaKuhne/API-usuario
 
-go 1.23.1
+go 1.23.0
 
 require (
 	github.com/bytedance/sonic v1.11.6 // indirect
