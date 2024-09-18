@@ -16,7 +16,7 @@ func CreateUser(c *gin.Context, db *sql.DB) {
 		return
 	}
 
-	query := `INSERT INTO Usuario (nome, data_nascimento, email, senha, cidade_residencia_id, tipo)
+	query := `INSERT INTO usuario (nome, data_nascimento, email, senha, cidade_residencia_id, tipo)
 	          VALUES ($1, $2, $3, $4, $5, $6) RETURNING id`
 	err := db.QueryRow(query, usuario.Nome, usuario.DataNascimento, usuario.Email, usuario.Senha, usuario.CidadeResidenciaID, usuario.Tipo).Scan(&usuario.ID)
 	if err != nil {
@@ -29,7 +29,7 @@ func CreateUser(c *gin.Context, db *sql.DB) {
 
 // Função para buscar todos os usuários
 func GetAllUsers(c *gin.Context, db *sql.DB) {
-	rows, err := db.Query("SELECT id, nome, data_nascimento, email, cidade_residencia_id, tipo FROM Usuario")
+	rows, err := db.Query("SELECT id, nome, data_nascimento, email, cidade_residencia_id, tipo FROM usuario")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao obter usuários"})
 		return
