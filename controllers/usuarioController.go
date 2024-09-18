@@ -2,10 +2,11 @@ package controllers
 
 import (
 	"database/sql"
-	"net/http"
-
-	"github.com/KarinaKuhne/api-usuario/models"
+	"github.com/KarinaKuhne/API-usuario/controllers"
+	"github.com/KarinaKuhne/API-usuario/models"
+	"github.com/KarinaKuhne/API-usuario/routes"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 // Função para criar um usuário

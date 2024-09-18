@@ -3,12 +3,13 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"log"
-	"os"
-
-	"github.com/KarinaKuhne/api-usuario/routes"
+	"github.com/KarinaKuhne/API-usuario/controllers"
+	"github.com/KarinaKuhne/API-usuario/models"
+	"github.com/KarinaKuhne/API-usuario/routes"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
+	"log"
+	"os"
 )
 
 func setupDB() (*sql.DB, error) {
