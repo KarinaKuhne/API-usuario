@@ -58,7 +58,7 @@ func EditarUsuario(c *gin.Context) {
 }
 
 func RotaNaoEncontrada(c *gin.Context) {
-	c.HTML(http.StatusNotFound, "notFound.html", nil)
+	c.HTML(http.StatusNotFound, "./assets/notFound.html", nil)
 }
 
 //Criar func de rota 404 ok criar asset com o html
